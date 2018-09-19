@@ -148,3 +148,4 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 # inputOutputLayerMappingFunction(32,3,1,1,64,1)
 inputOutputLayerMappingFunction(10,3,1,1,3,64)
 
+print ('hello')
