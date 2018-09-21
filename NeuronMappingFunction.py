@@ -4,7 +4,18 @@ import math
 from pandas import ExcelWriter
 
 
-def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue):
+def is_square(apositiveint):
+    x = apositiveint // 2
+    seen = set([x])
+    while x * x != apositiveint:
+        x = (x + (apositiveint // x)) // 2
+        if x in seen: return False
+        seen.add(x)
+    return True
+
+
+def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue, coreUtilization):
+    # type: (object, object, object, object, object, object, object) -> object
 
     original_input_size = inputLayerSize
     filter_size = filterSize
@@ -128,7 +139,6 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 
     mappingDataFrame = pd.DataFrame(data=mappingDict, columns=allOuputNeuronsInColoumn)
     print (mappingDataFrame)
-
     # print (pd.DataFrame(newDict))
 
     print (
@@ -142,10 +152,43 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
     # mappingDataFrame.to_excel(writer, 'Mapping2')
     # writer.save()
 
-# (inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue)
 
-# inputOutputLayerMappingFunction(5,3,1,0,3,1)
+    # Core utilization : eg- [40,120]
+    utilizedAxons_core = coreUtilization[0]
+    utilizedNeurons_core = coreUtilization[1]
+
+    synapsesSelectedPerOutputFeatureMap_core = utilizedNeurons_core/noOfOutputChannels
+    if is_square(synapsesSelectedPerOutputFeatureMap_core):
+        rowSize_core = columnSize_core = math.sqrt(synapsesSelectedPerOutputFeatureMap_core)
+    else:
+        rowSize_core = 2
+        columnSize_core = synapsesSelectedPerOutputFeatureMap_core/2
+
+    print (rowSize_core)
+    print (columnSize_core)
+
+    neuronsSelected_core = []
+
+    for featureMap in range(1,noOfOutputFeatureMaps+1):
+
+        for row in range(1,int(rowSize_core)+1):
+
+            for column in range(1,int(columnSize_core)+1):
+
+                # print ('feature map %s row %s column %s' % (featureMap, row,column))
+                neuronsSelected_core.append('L2- F%s :N[%s,%s]' % (featureMap, row, column))
+
+    print ('')
+    print ('selected output neurons - %s' % (neuronsSelected_core))
+    selectedOutputNeuronDictionary = {'cols': [neuronsSelected_core[0], neuronsSelected_core[1],neuronsSelected_core[2],neuronsSelected_core[3]]}
+    associatedInputNeurons = mappingDataFrame[selectedOutputNeuronDictionary['cols']]
+    print(associatedInputNeurons)
+    check = list(associatedInputNeurons.values.flatten())
+    print ('')
+# (inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue, coreUtilization)
+
+# inputOutputLayerMappingFunction(5,3,1,0,3,1
 # inputOutputLayerMappingFunction(32,3,1,1,64,1)
-inputOutputLayerMappingFunction(10,3,1,1,3,64)
+# inputOutputLayerMappingFunction(10,3,1,1,3,64,[40,120])
 
-print ('hello')
+inputOutputLayerMappingFunction(28,3,1,1,16,32,[256,128])
