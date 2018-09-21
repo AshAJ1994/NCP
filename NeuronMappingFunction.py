@@ -13,6 +13,11 @@ def is_square(apositiveint):
         seen.add(x)
     return True
 
+def removeDuplicates(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
+
 
 def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue, coreUtilization):
     # type: (object, object, object, object, object, object, object) -> object
@@ -138,7 +143,7 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 
 
     mappingDataFrame = pd.DataFrame(data=mappingDict, columns=allOuputNeuronsInColoumn)
-    print (mappingDataFrame)
+    # print (mappingDataFrame)
     # print (pd.DataFrame(newDict))
 
     print (
@@ -180,15 +185,30 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 
     print ('')
     print ('selected output neurons - %s' % (neuronsSelected_core))
-    selectedOutputNeuronDictionary = {'cols': [neuronsSelected_core[0], neuronsSelected_core[1],neuronsSelected_core[2],neuronsSelected_core[3]]}
-    associatedInputNeurons = mappingDataFrame[selectedOutputNeuronDictionary['cols']]
-    print(associatedInputNeurons)
-    check = list(associatedInputNeurons.values.flatten())
-    print ('')
-# (inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue, coreUtilization)
+    print ('no of output neurons utilized = %s ', len(neuronsSelected_core))
+    # selectedOutputNeuronDictionary = {'cols': [neuronsSelected_core[0], neuronsSelected_core[1],neuronsSelected_core[2],neuronsSelected_core[3],'L2- F2 :N[1,1]', 'L2- F2 :N[1,2]', 'L2- F2 :N[2,1]', 'L2- F2 :N[2,2]']}
+    selectedOutputNeuronDictionary = {'cols': neuronsSelected_core}
+    associatedInputNeuronsDictionary = mappingDataFrame[selectedOutputNeuronDictionary['cols']]
 
+    associatedInputNeuronsArray = []
+    associatedInputNeuronsArray = list(associatedInputNeuronsDictionary.values.flatten())
+
+    print ('No of input neurons utilized including duplicates %s' % (len(associatedInputNeuronsArray)))
+    associatedInputNeuronsArray = removeDuplicates(associatedInputNeuronsArray)
+    print ('Associated Input Neurons')
+    print (associatedInputNeuronsArray)
+    print ('No of input neurons utilized without duplicates (Optimal Utilization Method) %s' % (len(associatedInputNeuronsArray)))
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------ Input function calling statement follows (Start of program)--------------------------------------------------------
+
+# (inputLayerSize, filterSize, strideValue, paddingValue, noOfInputChannelsValue, noOfOuputChannelsValue, coreUtilization)
 # inputOutputLayerMappingFunction(5,3,1,0,3,1
 # inputOutputLayerMappingFunction(32,3,1,1,64,1)
 # inputOutputLayerMappingFunction(10,3,1,1,3,64,[40,120])
 
 inputOutputLayerMappingFunction(28,3,1,1,16,32,[256,128])
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------
