@@ -185,7 +185,7 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 
     print ('')
     print ('selected output neurons - %s' % (neuronsSelected_core))
-    print ('no of output neurons utilized = %s ', len(neuronsSelected_core))
+    print ('no of output neurons utilized  %s ', len(neuronsSelected_core))
     # selectedOutputNeuronDictionary = {'cols': [neuronsSelected_core[0], neuronsSelected_core[1],neuronsSelected_core[2],neuronsSelected_core[3],'L2- F2 :N[1,1]', 'L2- F2 :N[1,2]', 'L2- F2 :N[2,1]', 'L2- F2 :N[2,2]']}
     selectedOutputNeuronDictionary = {'cols': neuronsSelected_core}
     associatedInputNeuronsDictionary = mappingDataFrame[selectedOutputNeuronDictionary['cols']]
@@ -209,6 +209,6 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 # inputOutputLayerMappingFunction(32,3,1,1,64,1)
 # inputOutputLayerMappingFunction(10,3,1,1,3,64,[40,120])
 
-inputOutputLayerMappingFunction(28,3,1,1,16,32,[256,128])
+inputOutputLayerMappingFunction(28,3,2,1,16,32,[240,64])
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
