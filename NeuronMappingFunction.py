@@ -169,8 +169,8 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
         rowSize_core = 2
         columnSize_core = synapsesSelectedPerOutputFeatureMap_core/2
 
-    print (rowSize_core)
-    print (columnSize_core)
+    print ('Row Size %s' % (rowSize_core))
+    print ('Column Size %s' % (columnSize_core))
 
     neuronsSelected_core = []
 
@@ -185,15 +185,15 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 
     print ('')
     print ('selected output neurons - %s' % (neuronsSelected_core))
-    print ('no of output neurons utilized = %s ', len(neuronsSelected_core))
+    print ('no of output neurons utilized - %s ', len(neuronsSelected_core))
     # selectedOutputNeuronDictionary = {'cols': [neuronsSelected_core[0], neuronsSelected_core[1],neuronsSelected_core[2],neuronsSelected_core[3],'L2- F2 :N[1,1]', 'L2- F2 :N[1,2]', 'L2- F2 :N[2,1]', 'L2- F2 :N[2,2]']}
     selectedOutputNeuronDictionary = {'cols': neuronsSelected_core}
     associatedInputNeuronsDictionary = mappingDataFrame[selectedOutputNeuronDictionary['cols']]
 
     associatedInputNeuronsArray = []
     associatedInputNeuronsArray = list(associatedInputNeuronsDictionary.values.flatten())
-
     print ('No of input neurons utilized including duplicates %s' % (len(associatedInputNeuronsArray)))
+
     associatedInputNeuronsArray = removeDuplicates(associatedInputNeuronsArray)
     print ('Associated Input Neurons')
     print (associatedInputNeuronsArray)
@@ -209,6 +209,10 @@ def inputOutputLayerMappingFunction(inputLayerSize, filterSize, strideValue, pad
 # inputOutputLayerMappingFunction(32,3,1,1,64,1)
 # inputOutputLayerMappingFunction(10,3,1,1,3,64,[40,120])
 
-inputOutputLayerMappingFunction(28,3,1,1,16,32,[256,128])
+# inputOutputLayerMappingFunction(28,3,2,1,16,64,[240,128])
+# inputOutputLayerMappingFunction(56,3,1,1,3,16,[120,256])
+
+# inputOutputLayerMappingFunction(56,2,2,0,3,16,[144,256])
+inputOutputLayerMappingFunction(32,3,1,0,3,2,[252,76])
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
